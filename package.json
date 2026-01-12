@@ -1,0 +1,24 @@
+{
+  "name": "dockver",
+  "packageManager": "yarn@4.11.0",
+  "scripts": {
+    "dev": "node -r ts-node/register src/index.ts",
+    "lint": "eslint",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.1",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.7.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.10.7",
+    "eslint": "^9.39.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0",
+    "vitest": "^4.0.16"
+  }
+}
