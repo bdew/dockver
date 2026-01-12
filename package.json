@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "js-yaml": "^4.1.1",
+    "semver": "^7.7.3",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -15,11 +16,12 @@
     "@stylistic/eslint-plugin": "^5.7.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.7",
+    "@types/semver": "^7",
     "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^9.39.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.52.0",
-    "vitest": "^4.0.16"
+    "typescript-eslint": "^8.53.0",
+    "vitest": "^4.0.17"
   }
 }

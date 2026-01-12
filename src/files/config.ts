@@ -16,6 +16,9 @@ const ImageSchema = z.object({
   image: z.string(),
   match: z.enum(["regex", "pattern"]).default("pattern"),
   pattern: z.string().default("#.#.#"),
+  compare: z.enum(["semver", "string", "number"]).default("semver"),
+  minVer: z.coerce.string().optional(),
+  maxVer: z.coerce.string().optional(),
   auth: ImageAuthSchema.optional(),
 }).strict();
 
