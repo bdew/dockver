@@ -14,6 +14,8 @@ const ImageAuthSchema = z.union([
 
 const ImageSchema = z.object({
   image: z.string(),
+  match: z.enum(["regex", "pattern"]).default("pattern"),
+  pattern: z.string().default("#.#.#"),
   auth: ImageAuthSchema.optional(),
 }).strict();
 
