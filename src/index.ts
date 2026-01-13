@@ -3,6 +3,7 @@ import path from "path";
 import { parseConfig } from "./files/config";
 import { processImage } from "./process";
 import { parseVersions, saveVersions, Versions } from "./files/versions";
+import { GitHandler } from "./git";
 
 async function main(): Promise<void> {
   if (process.argv.length !== 3) {
@@ -18,6 +19,8 @@ async function main(): Promise<void> {
 
   const versionsFilePath = path.resolve(path.dirname(configFilePath), config.output.file);
   console.log("Read versions from", versionsFilePath);
+
+  const git = config.git?.enabled ? new GitHandler(config.git, versionsFilePath) : null;
 
   let versions: Versions = {};
 
@@ -37,6 +40,8 @@ async function main(): Promise<void> {
       versions[name] = res;
       const versionsData = saveVersions(versions, config.output.format);
       fs.writeFileSync(versionsFilePath, versionsData, "utf-8");
+      if (git)
+        await git.commitChange(res);
     }
   }
 }

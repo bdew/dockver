@@ -22,6 +22,13 @@ const ImageSchema = z.object({
   auth: ImageAuthSchema.optional(),
 }).strict();
 
+const GitSchema = z.object({
+  enabled: z.boolean(),
+  name: z.string().default("dockver"),
+  email: z.string().default("dockver@bdew.net"),
+  message: z.string().default("Update: {image} -> {tag}"),
+}).strict();
+
 const OutputSchema = z.object({
   file: z.string().default("images.yaml"),
   format: z.enum(["json", "yaml"]).default("yaml"),
@@ -29,12 +36,14 @@ const OutputSchema = z.object({
 
 const ConfigSchema = z.object({
   output: OutputSchema.default(OutputSchema.parse({})),
+  git: GitSchema.optional(),
   images: z.record(z.string(), ImageSchema),
 }).strict();
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type ImageConfig = z.infer<typeof ImageSchema>;
 export type OutputConfig = z.infer<typeof OutputSchema>;
+export type GitConfig = z.infer<typeof GitSchema>;
 
 export function parseConfig(data: string): Config {
   return ConfigSchema.parse(yaml.load(data));
