@@ -2,6 +2,7 @@ import { AuthRequest, parseAuthRequest, parseLinkHeaders } from "./headers";
 import { ResponseStatusOk, ResponseStatusUnauthorized, TokenResponse, Response, RepoAuthBasic, TagsResponse, ResponseOk } from "./types";
 
 const DEFAULT_REGISTRY = "https://registry-1.docker.io";
+const REPO_DEBUG = !!process.env["REPO_DEBUG"];
 
 export class DockerRepo {
   private token: string | null = null;
@@ -66,7 +67,7 @@ export class DockerRepo {
       headers.append("Authorization", `Basic ${basicAuth}`);
     }
 
-    console.log("Authenticate:", url.href);
+    if (REPO_DEBUG) console.log("Authenticate:", url.href);
 
     const req = await fetch(url, { headers });
     if (req.ok) {
@@ -78,7 +79,7 @@ export class DockerRepo {
   }
 
   private async get<T>(url: URL): Promise<Response<T>> {
-    console.log("Get:", url.href);
+    if (REPO_DEBUG) console.log("Get:", url.href);
 
     const headers = new Headers();
     if (this.token)

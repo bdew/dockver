@@ -2,13 +2,14 @@ import { ImageConfig } from "./files/config";
 import { RegexMatcher, TagMatcher } from "./versions/matcher";
 import { DockerRepo } from "./repo/repo";
 import { TagCompareNumber, TagComparer, TagCompareSemver, TagCompareString } from "./versions/comparer";
+import { VersionsItem } from "./files/versions";
 
 interface TagMatch {
   tag: string;
   match: string;
 }
 
-export async function processImage(name: string, config: ImageConfig): Promise<void> {
+export async function processImage(name: string, config: ImageConfig, current: VersionsItem | null): Promise<VersionsItem | null> {
   console.group("Processing", name);
   try {
     const repo = DockerRepo.fromImage(config.image);
@@ -37,14 +38,26 @@ export async function processImage(name: string, config: ImageConfig): Promise<v
 
     if (!matched.length) {
       console.warn("No tags are matching");
-      return;
+      return null;
     }
 
     matched.sort((a, b) => comparer.compare(a.match, b.match)).reverse();
+    const top = matched[0];
 
-    console.log("top tag", matched[0]);
+    if (current?.image === config.image && current?.tag === top.tag) {
+      console.log("Keeping current version", current.tag);
+      return null;
+    }
+
+    console.log("Updating to", top.tag);
+
+    return {
+      image: config.image,
+      tag: top.tag,
+    };
   } catch (err) {
     console.error("Error:", err);
+    return null;
   } finally {
     console.groupEnd();
   }
