@@ -44,7 +44,9 @@ export async function processImage(name: string, config: ImageConfig, current: V
     matched.sort((a, b) => comparer.compare(a.match, b.match)).reverse();
     const top = matched[0];
 
-    if (current?.image === config.image && current?.tag === top.tag) {
+    const digest = await repo.getDigest(top.tag);
+
+    if (current?.image === config.image && current?.tag === top.tag && current?.digest === digest) {
       console.log("Keeping current version", current.tag);
       return null;
     }
@@ -54,6 +56,7 @@ export async function processImage(name: string, config: ImageConfig, current: V
     return {
       image: config.image,
       tag: top.tag,
+      digest,
     };
   } catch (err) {
     console.error("Error:", err);

@@ -20,11 +20,19 @@ export class DockerRepo {
     return res.flatMap(x => x.tags);
   }
 
-  private async getPaged<T>(path: string): Promise<T[]> {
+  public async getDigest(tag: string): Promise<string> {
+    const url = this.buildUrl(`manifests/${tag}`);
+    const res = await this.getWithAuth(url, { accept: "application/vnd.oci.image.index.v1+json" });
+    if (res.headers.has("Docker-Content-Digest"))
+      return res.headers.get("Docker-Content-Digest")!;
+    else throw new Error("No digest header");
+  }
+
+  private async getPaged<T>(path: string, addHeaders?: Record<string, string>): Promise<T[]> {
     let url = this.buildUrl(path);
     const res = new Array<T>();
     while (true) {
-      const page = await this.getWithAuth<T>(url);
+      const page = await this.getWithAuth<T>(url, addHeaders);
       res.push(page.response);
       if (!page.headers.has("link")) break;
       const links = parseLinkHeaders(page.headers.get("link")!, url);
@@ -39,9 +47,9 @@ export class DockerRepo {
     return new URL(`v2/${this.image}/${path}`, this.repo);
   }
 
-  private async getWithAuth<T>(url: URL): Promise<ResponseOk<T>> {
+  private async getWithAuth<T>(url: URL, addHeaders?: Record<string, string>): Promise<ResponseOk<T>> {
     while (true) {
-      const res = await this.get<T>(url);
+      const res = await this.get<T>(url, addHeaders);
       if (res.status === ResponseStatusOk) {
         return res;
       } else {
@@ -78,12 +86,18 @@ export class DockerRepo {
     }
   }
 
-  private async get<T>(url: URL): Promise<Response<T>> {
+  private async get<T>(url: URL, addHeaders?: Record<string, string>): Promise<Response<T>> {
     if (REPO_DEBUG) console.log("Get:", url.href);
 
     const headers = new Headers();
     if (this.token)
       headers.append("Authorization", `Bearer ${this.token}`);
+
+    if (addHeaders) {
+      for (const [header, value] of Object.entries(addHeaders)) {
+        headers.append(header, value);
+      }
+    }
 
     const req = await fetch(url, { headers });
     if (req.ok) {
@@ -100,6 +114,7 @@ export class DockerRepo {
           request: authReq,
         };
       }
+      console.log(await req.text());
       throw new Error(`Request failed - ${req.status} ${req.statusText}`);
     }
   }

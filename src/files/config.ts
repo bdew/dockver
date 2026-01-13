@@ -22,13 +22,19 @@ const ImageSchema = z.object({
   auth: ImageAuthSchema.optional(),
 }).strict();
 
+const OutputSchema = z.object({
+  file: z.string().default("images.yaml"),
+  format: z.enum(["json", "yaml"]).default("yaml"),
+}).strict();
+
 const ConfigSchema = z.object({
-  outFile: z.string().default("images.yaml"),
+  output: OutputSchema.default(OutputSchema.parse({})),
   images: z.record(z.string(), ImageSchema),
 }).strict();
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type ImageConfig = z.infer<typeof ImageSchema>;
+export type OutputConfig = z.infer<typeof OutputSchema>;
 
 export function parseConfig(data: string): Config {
   return ConfigSchema.parse(yaml.load(data));

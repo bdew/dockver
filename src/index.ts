@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   const configFile = fs.readFileSync(configFilePath, "utf-8");
   const config = parseConfig(configFile);
 
-  const versionsFilePath = path.resolve(path.dirname(configFilePath), config.outFile);
+  const versionsFilePath = path.resolve(path.dirname(configFilePath), config.output.file);
   console.log("Read versions from", versionsFilePath);
 
   let versions: Versions = {};
@@ -24,7 +24,7 @@ async function main(): Promise<void> {
   try {
     if (fs.existsSync(versionsFilePath)) {
       const versionsData = fs.readFileSync(versionsFilePath, "utf-8");
-      versions = parseVersions(versionsData);
+      versions = parseVersions(versionsData, config.output.format);
     }
   } catch (err) {
     console.error("Failed to read versions:", err);
@@ -35,7 +35,7 @@ async function main(): Promise<void> {
     const res = await processImage(name, image, versions[name] ?? null);
     if (res) {
       versions[name] = res;
-      const versionsData = saveVersions(versions);
+      const versionsData = saveVersions(versions, config.output.format);
       fs.writeFileSync(versionsFilePath, versionsData, "utf-8");
     }
   }

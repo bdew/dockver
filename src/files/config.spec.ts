@@ -3,7 +3,9 @@ import { parseConfig } from "./config";
 
 test("parse config", () => {
   const config = parseConfig(`
-    outFile: ./foo.yaml
+    output:
+      file: ./foo.json
+      format: json
     images: 
       foo:
         image: foo
@@ -13,7 +15,8 @@ test("parse config", () => {
       bar:
         image: bar
   `);
-  expect(config).toHaveProperty("outFile", "./foo.yaml");
+  expect(config).toHaveProperty("output.file", "./foo.json");
+  expect(config).toHaveProperty("output.format", "json");
   expect(config).toHaveProperty("images.foo.image", "foo");
   expect(config).toHaveProperty("images.foo.auth.username", "foouser");
   expect(config).not.toHaveProperty("images.bar.auth");
@@ -23,7 +26,7 @@ test("parse default values", () => {
   const config = parseConfig(`
     images: {}
   `);
-  expect(config).toHaveProperty("outFile", "images.yaml");
+  expect(config).toHaveProperty("output.file", "images.yaml");
 });
 
 test("fail on unknown values", () => {
