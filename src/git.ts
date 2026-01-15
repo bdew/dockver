@@ -25,7 +25,7 @@ export class GitHandler {
     console.log("Using git repository", this.gitRoot, "file:", this.versionsPath);
   }
 
-  public async commitChange(image: VersionsItem): Promise<void> {
+  public async commitChange(prev?: VersionsItem, image?: VersionsItem): Promise<void> {
     await git.add({
       fs,
       dir: this.gitRoot,
@@ -35,7 +35,7 @@ export class GitHandler {
     const res = await git.commit({
       fs,
       dir: this.gitRoot,
-      message: this.formatMessage(image),
+      message: this.formatMessage(prev, image),
       author: {
         name: this.config.name,
         email: this.config.email,
@@ -45,10 +45,18 @@ export class GitHandler {
     console.log("Comitted:", res);
   }
 
-  private formatMessage(image: VersionsItem): string {
-    let msg = this.config.message;
-    msg = msg.replace("{image}", image.image);
-    msg = msg.replace("{tag}", image.tag);
-    return msg;
+  private formatMessage(prev?: VersionsItem, image?: VersionsItem): string {
+    if (!image) {
+      if (!prev) throw new Error("Changing nothing to nothing?");
+      let msg = this.config.messageRemove;
+      msg = msg.replace("{image}", prev.image);
+      msg = msg.replace("{tag}", prev.tag);
+      return msg;
+    } else {
+      let msg = prev ? this.config.messageUpdate : this.config.messageAdd;
+      msg = msg.replace("{image}", image.image);
+      msg = msg.replace("{tag}", image.tag);
+      return msg;
+    }
   }
 }

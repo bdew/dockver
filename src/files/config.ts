@@ -26,7 +26,9 @@ const GitSchema = z.object({
   enabled: z.boolean(),
   name: z.string().default("dockver"),
   email: z.string().default("dockver@bdew.net"),
-  message: z.string().default("Update: {image} -> {tag}"),
+  messageUpdate: z.string().default("Update: {image} -> {tag}"),
+  messageRemove: z.string().default("Remove: {image}"),
+  messageAdd: z.string().default("Add: {image} -> {tag}"),
 }).strict();
 
 const OutputSchema = z.object({

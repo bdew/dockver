@@ -34,14 +34,26 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  const toRemove = Object.keys(versions).filter(name => !config.images[name]);
+  for (const name of toRemove) {
+    console.log("Removing image that's not in config:", name);
+    const prev = versions[name];
+    delete versions[name];
+    const versionsData = saveVersions(versions, config.output.format);
+    fs.writeFileSync(versionsFilePath, versionsData, "utf-8");
+    if (git)
+      await git.commitChange(prev, undefined);
+  }
+
   for (const [name, image] of Object.entries(config.images)) {
     const res = await processImage(name, image, versions[name] ?? null);
     if (res) {
+      const prev = versions[name];
       versions[name] = res;
       const versionsData = saveVersions(versions, config.output.format);
       fs.writeFileSync(versionsFilePath, versionsData, "utf-8");
       if (git)
-        await git.commitChange(res);
+        await git.commitChange(prev, res);
     }
   }
 }
