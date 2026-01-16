@@ -6,6 +6,8 @@ export interface TagComparer {
 
 export const TagCompareSemver: TagComparer = {
   compare(a, b) {
+    if (a.split(".").length === 2) a = `${a}.0`;
+    if (b.split(".").length === 2) b = `${b}.0`;
     return semver.compare(a, b);
   },
 };
