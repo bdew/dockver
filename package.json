@@ -1,9 +1,12 @@
 {
   "name": "dockver",
+  "author": "bdew",
+  "license": "MIT",
   "packageManager": "yarn@4.11.0",
   "scripts": {
     "dev": "node -r ts-node/register --env-file .env src/index.ts",
-    "build": "rollup -c",
+    "schema": "yarn dev --generate-config-schema config.schema.json",
+    "build": "rollup -c && node dist/index.js --generate-config-schema config.schema.json",
     "lint": "eslint",
     "test": "vitest"
   },

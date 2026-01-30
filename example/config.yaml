@@ -1,0 +1,23 @@
+﻿# yaml-language-server: $schema=../config.schema.json
+
+output:
+  file: images.yaml
+  format: yaml
+git:
+  enabled: true
+  name: dockver[bot]
+  email: dockver@example.com
+  messageUpdate: "Update: {image} -> {tag}"
+  messageRemove: "Remove: {image}"
+  messageAdd: "Add: {image -> {tag}"
+images:
+  mariadb:
+    image: docker.io/mariadb
+    match: pattern
+    pattern: "#.#.#"
+    compare: semver
+  privateImage:
+    image: registry.example.com/foo/bar
+    auth: 
+      username: user
+      passwordFromEnv: EXAMPLE_COM_PASSWORD

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { parseConfig } from "./files/config";
+import { generateSchema, parseConfig } from "./files/config";
 import { parseVersions, saveVersions, Versions } from "./files/versions";
 import { GitHandler } from "./git";
 import { processImage } from "./process";
@@ -10,10 +10,16 @@ import { processImage } from "./process";
 async function main(): Promise<void> {
   const args = await yargs(hideBin(process.argv))
     .usage("Usage: $0 <configFile>")
-
     .option("only-new", { alias: "n", type: "boolean", desc: "Only process new images" })
+    .option("generate-config-schema", { type: "boolean", hidden: true })
     .demandCommand(1, 1)
     .parse();
+
+  if (args.generateConfigSchema) {
+    console.log(`Writing config schema to: ${args._[0].toString()}`);
+    fs.writeFileSync(args._[0].toString(), generateSchema());
+    process.exit(0);
+  }
 
   const configFilePath = path.resolve(args._[0].toString());
   console.log("Read config from", configFilePath);

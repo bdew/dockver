@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "output": {
+      "default": {
+        "file": "images.yaml",
+        "format": "yaml"
+      },
+      "type": "object",
+      "properties": {
+        "file": {
+          "default": "images.yaml",
+          "description": "Output file path, relative to config file",
+          "type": "string"
+        },
+        "format": {
+          "default": "yaml",
+          "description": "Output file format",
+          "type": "string",
+          "enum": [
+            "json",
+            "yaml"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "description": "Output configuration"
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "If enabled will do a git commit after every change"
+        },
+        "name": {
+          "default": "dockver[bot]",
+          "description": "Git commit author name",
+          "type": "string"
+        },
+        "email": {
+          "default": "dockver@bdew.net",
+          "description": "Git commit author email",
+          "type": "string"
+        },
+        "messageUpdate": {
+          "default": "Update: {image} -> {tag}",
+          "description": "Git commit message for updates",
+          "type": "string"
+        },
+        "messageRemove": {
+          "default": "Remove: {image}",
+          "description": "Git commit message for removed images",
+          "type": "string"
+        },
+        "messageAdd": {
+          "default": "Add: {image} -> {tag}",
+          "description": "Git commit message for added images",
+          "type": "string"
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "additionalProperties": false,
+      "description": "Git commits configuration"
+    },
+    "images": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "Image name to check"
+          },
+          "match": {
+            "default": "pattern",
+            "description": "Mechanism used to filter tags and extract version",
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "pattern",
+                "description": "Use simple pattern to filter tags"
+              },
+              {
+                "type": "string",
+                "const": "regex",
+                "description": "Use regex to filter tags"
+              }
+            ]
+          },
+          "pattern": {
+            "default": "#.#.#",
+            "description": "Pattern to match against tags",
+            "type": "string"
+          },
+          "compare": {
+            "default": "semver",
+            "description": "Mechanism used to compare versions",
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "semver",
+                "description": "Compare versions using semantic version rules"
+              },
+              {
+                "type": "string",
+                "const": "number",
+                "description": "Compare versions as numbers"
+              },
+              {
+                "type": "string",
+                "const": "string",
+                "description": "Compare versions lexicographically (like a string)"
+              }
+            ]
+          },
+          "minVer": {
+            "description": "Minimum accepted version, in the format expected by the selected compare method",
+            "type": "string"
+          },
+          "maxVer": {
+            "description": "Maximum accepted version, in the format expected by the selected compare method",
+            "type": "string"
+          },
+          "auth": {
+            "description": "Authentication for private registries",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Private registry username"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Private registry password"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Private registry username"
+                  },
+                  "passwordFromEnv": {
+                    "type": "string",
+                    "description": "Private registry password (read from environment variable)"
+                  }
+                },
+                "required": [
+                  "username",
+                  "passwordFromEnv"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "image"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "images"
+  ],
+  "additionalProperties": false
+}
