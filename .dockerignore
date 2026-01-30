@@ -1,0 +1,13 @@
+node_modules
+dist
+.env
+.dockerignore
+.git
+.gitignore
+.gitattributes
+.github
+.yarn
+.vscode
+.forgejo
+Dockerfile
+renovate.json

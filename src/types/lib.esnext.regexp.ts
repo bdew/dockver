@@ -1,4 +1,5 @@
 // TODO: Remove this after it's added to typescript
+export {};
 declare global {
   interface RegExpConstructor {
     /**
