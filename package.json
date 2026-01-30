@@ -2,7 +2,7 @@
   "name": "dockver",
   "author": "bdew",
   "license": "MIT",
-  "packageManager": "yarn@4.11.0",
+  "packageManager": "yarn@4.12.0",
   "scripts": {
     "dev": "node -r ts-node/register --env-file .env src/index.ts",
     "schema": "yarn dev --generate-config-schema config.schema.json",
