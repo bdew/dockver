@@ -1650,7 +1650,7 @@ __metadata:
     "@types/yargs": "npm:^17.0.35"
     "@vitest/coverage-v8": "npm:^4.0.18"
     eslint: "npm:^9.39.2"
-    isomorphic-git: "npm:^1.36.3"
+    isomorphic-git: "npm:^1.37.1"
     js-yaml: "npm:^4.1.1"
     rollup: "npm:^4.57.1"
     semver: "npm:^7.7.4"
@@ -2418,9 +2418,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-git@npm:^1.36.3":
-  version: 1.36.3
-  resolution: "isomorphic-git@npm:1.36.3"
+"isomorphic-git@npm:^1.37.1":
+  version: 1.37.1
+  resolution: "isomorphic-git@npm:1.37.1"
   dependencies:
     async-lock: "npm:^1.4.1"
     clean-git-ref: "npm:^2.0.1"
@@ -2435,7 +2435,7 @@ __metadata:
     simple-get: "npm:^4.0.1"
   bin:
     isogit: cli.cjs
-  checksum: 10c0/eeb0d74d4f7f455cd1ef229a6c25bb49c6f3dcfb74f14b185c5f3c5b31083ef7a1b9046bfafc5024e2f9e5ae8035f4c58212bb63ce4965f6f02592cb9fac673e
+  checksum: 10c0/79079b65185949d9d4897cf6caa3e2f44dcdca951299cc048cfcf94d3d4016a5e9c4bc3b118b47b5cad5f6fb8d4c0169af0317c74f0c6da4097d7602c6c06abe
   languageName: node
   linkType: hard
 
