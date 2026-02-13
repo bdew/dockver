@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended"
   ],
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
   "packageRules": [
     {
       "matchDepTypes": [
@@ -11,6 +11,16 @@
         "devDependencies"
       ],
       "rangeStrategy": "bump"
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
     }
-  ]
+  ],
+  "platformAutomerge": true
 }
