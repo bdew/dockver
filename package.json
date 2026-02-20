@@ -30,7 +30,7 @@
     "@types/yargs": "^17.0.35",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^10.0.0",
-    "rollup": "^4.57.1",
+    "rollup": "^4.58.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0",
