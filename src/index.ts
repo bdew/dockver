@@ -70,4 +70,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(console.error);
+main().catch((x) => {
+  console.error(x);
+  process.exit(1);
+});
