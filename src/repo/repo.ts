@@ -58,16 +58,19 @@ export class DockerRepo {
     }
   }
 
-  private async authenticate(authReq: AuthRequest): Promise<void> {
-    if (authReq.mechanism !== "Bearer")
-      throw new Error(`Unexpected authentication mechanism: ${authReq.mechanism}`);
-    if (!authReq.params["realm"])
+  private async authenticate(authReq: AuthRequest[]): Promise<void> {
+    if (REPO_DEBUG) console.log("Authenticate request:", authReq);
+
+    const bearerReq = authReq.find(x => x.mechanism === "Bearer");
+    if (!bearerReq) throw new Error("No supported authentication mechanism found");
+
+    if (!bearerReq.params["realm"])
       throw new Error("No realm in authentication challenge");
 
-    const url = new URL(authReq.params["realm"]);
+    const url = new URL(bearerReq.params["realm"]);
     const qs = url.searchParams;
-    if (authReq.params["service"]) qs.append("service", authReq.params["service"]);
-    if (authReq.params["scope"]) qs.append("scope", authReq.params["scope"]);
+    if (bearerReq.params["service"]) qs.append("service", bearerReq.params["service"]);
+    if (bearerReq.params["scope"]) qs.append("scope", bearerReq.params["scope"]);
 
     const headers = new Headers();
     if (this.auth) {

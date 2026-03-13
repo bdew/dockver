@@ -15,7 +15,6 @@ export class GitHandler {
       if (checkPath === parent)
         throw new Error("Git repository not found");
       checkPath = parent;
-      console.log("Check", checkPath);
       if (fs.existsSync(path.join(checkPath, ".git"))) {
         this.gitRoot = checkPath;
         break;

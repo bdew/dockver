@@ -9,20 +9,29 @@ export interface LinkHeader {
   extra: Record<string, string>;
 }
 
+const AUTH_GROUPS_RE = /(\w+) ((?:(?:\w+=[^,]+),?)+)/g;
 const AUTH_PARAM_RE = /(\w+)=(".*?"|[^",]+)(?=,|$)/g;
 const LINK_HEADER_SEP_RE = /,\s*</;
 const LINK_HEADER_RE = /<?([^>]*)>(.*)/;
 const LINK_HEADER_PARAM_RE = /\s*(.+)\s*=\s*"?([^"]+)"?/;
 
-export function parseAuthRequest(header: string): AuthRequest {
-  const [mechanism, ...paramString] = header.split(" ");
-  const params: Record<string, string> = {};
-  const paramMatches = paramString.join(" ").matchAll(AUTH_PARAM_RE);
-  for (const [, key, value] of paramMatches) {
-    params[key] = value.replace(/^"|"$/g, "");
+export function parseAuthRequest(header: string): AuthRequest[] {
+  const matches = header.matchAll(AUTH_GROUPS_RE);
+
+  const res: AuthRequest[] = [];
+  for (const match of matches) {
+    const mechanism = match[1];
+    const paramString = match[2];
+    const params: Record<string, string> = {};
+    const paramMatches = paramString.matchAll(AUTH_PARAM_RE);
+    for (const [, key, value] of paramMatches) {
+      params[key] = value.replace(/^"|"$/g, "");
+    }
+    res.push({ mechanism, params });
   }
 
-  return { mechanism, params };
+  if (!res?.length) throw new Error(`Failed to parse auth header: ${header}`);
+  return res;
 }
 
 export function parseLinkHeaders(header: string, base?: URL): LinkHeader[] {

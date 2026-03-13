@@ -11,7 +11,7 @@ export interface ResponseOk<T> {
 
 export interface ResponseUnauthorized {
   status: typeof ResponseStatusUnauthorized;
-  request: AuthRequest;
+  request: AuthRequest[];
 }
 
 export type Response<T> = ResponseOk<T> | ResponseUnauthorized;
