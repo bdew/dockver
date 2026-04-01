@@ -19,7 +19,20 @@
         "pin",
         "digest"
       ],
-      "automerge": true
+      "groupName": "non-major dependencies",
+      "automerge": true,
+      "schedule": [
+        "* 0 * * 5"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github actions",
+      "schedule": [
+        "* 0 * * 5"
+      ]
     }
   ],
   "platformAutomerge": true
