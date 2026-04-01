@@ -1,5 +1,3 @@
-import "../types/lib.esnext.regexp";
-
 export function makeRegexFromPattern(pattern: string): RegExp {
   let workingPattern = pattern;
 

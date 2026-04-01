@@ -3,15 +3,14 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "types": [
+      "node"
+    ],
     "lib": [
-      "es2024",
-      "ESNext.Array",
-      "ESNext.Collection",
-      "ESNext.Iterator",
-      "ESNext.Promise"
+      "es2025",
     ],
     "module": "nodenext",
-    "target": "es2024",
+    "target": "es2025",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
