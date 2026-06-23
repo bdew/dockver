@@ -1,5 +1,5 @@
 import z from "zod";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 const ImageAuthSchema = z.union([
   z.object({

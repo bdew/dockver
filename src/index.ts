@@ -23,7 +23,7 @@ async function main(): Promise<void> {
 
   const configFilePath = path.resolve(args._[0].toString());
   console.log("Read config from", configFilePath);
-  const configFile = fs.readFileSync(configFilePath, "utf-8");
+  const configFile = fs.readFileSync(configFilePath, "utf-8").replace(/^\uFEFF/, "");
   const config = parseConfig(configFile);
 
   const versionsFilePath = path.resolve(path.dirname(configFilePath), config.output.file);
